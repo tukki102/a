@@ -1,0 +1,14 @@
+const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+const app = express();
+
+// territorial.io への通信をすべて中継する設定
+app.use('/', createProxyMiddleware({
+  target: 'https://territorial.io',
+  changeOrigin: true, // 相手サイトに自分のURLを隠す
+  ws: true,           // ★重要：WebSocket（ゲームの通信）を許可する
+  logLevel: 'debug'
+}));
+
+app.listen(process.env.PORT || 3000);
